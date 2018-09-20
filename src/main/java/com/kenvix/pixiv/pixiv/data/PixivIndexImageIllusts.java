@@ -1,4 +1,4 @@
-package com.kenvix.pixiv;
+package com.kenvix.pixiv.pixiv.data;
 
 public class PixivIndexImageIllusts {
     public PixivIndexImageItem[] landscape;

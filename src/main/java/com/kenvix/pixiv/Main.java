@@ -1,4 +1,6 @@
 package com.kenvix.pixiv;
+import com.kenvix.pixiv.pixiv.PixivHTMLParser;
+import com.kenvix.pixiv.pixiv.PixivParser;
 import org.apache.commons.cli.*;
 
 import java.net.URL;

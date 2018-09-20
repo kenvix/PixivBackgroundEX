@@ -1,8 +1,8 @@
-package com.kenvix.pixiv;
+package com.kenvix.pixiv.pixiv.data;
 
 import com.google.gson.annotations.SerializedName;
 
-public class PixivIndexImageList {
+class PixivIndexImageList {
     @SerializedName("pixivBackgroundSlideshow.illusts")
     public PixivIndexImageIllusts ilusts;
 }

@@ -1,4 +1,4 @@
-package com.kenvix.pixiv;
+package com.kenvix.pixiv.pixiv.data;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -15,17 +15,14 @@ public class PixivIndexImageItem {
     @SerializedName("userName")
     public String user_name;
 
-    public String www_member_illust_medium_url;
-    public String www_user_url;
+    @SerializedName("www_member_illust_medium_url")
+    public String memberIllustMediumURL;
 
-    public class url {
-        public String medium;
+    @SerializedName("www_user_url")
+    public String userURL;
 
-        @SerializedName("1200x1200")
-        public String better;
-    }
+    public PixivIndexImageItemURL url;
 
-    public class profile_img {
-        public String main_s;
-    }
+    @SerializedName("profile_img")
+    public PixivIndexImageItemProfileImg profileImg;
 }
