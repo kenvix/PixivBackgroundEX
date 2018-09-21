@@ -1,28 +1,33 @@
 package com.kenvix.pixiv.pixiv.data;
-import com.google.gson.annotations.SerializedName;
+import com.kenvix.pixiv.driver.ImageItem;
 
 /**
  * PixivIndexImageItem
  * 单个PIXIV项目
  */
-public class PixivIndexImageItem {
-    @SerializedName("illust_id")
-    public int illustID;
+public class PixivIndexImageItem implements ImageItem {
+    //illust_id
+    public int ID;
 
-    @SerializedName("illust_title")
-    public String illustTitle;
+    //illust_title
+    public String title;
 
-    @SerializedName("userName")
-    public String user_name;
+    //userName
+    public String author;
 
-    @SerializedName("www_member_illust_medium_url")
-    public String memberIllustMediumURL;
+    //www_member_illust_medium_url
+    public String fromURL;
 
-    @SerializedName("www_user_url")
+    //www_user_url
     public String userURL;
 
+    public String imgRawURL;
+
+    //url
     public PixivIndexImageItemURL url;
 
-    @SerializedName("profile_img")
-    public PixivIndexImageItemProfileImg profileImg;
+    /**
+     * Original Image URL
+     */
+    public String imageURL;
 }

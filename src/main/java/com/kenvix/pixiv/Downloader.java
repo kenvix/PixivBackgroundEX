@@ -1,5 +1,7 @@
 package com.kenvix.pixiv;
 
+import com.zhan_dui.download.DownloadManager;
+import com.zhan_dui.download.DownloadMission;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
@@ -10,24 +12,33 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 
 public class Downloader {
-    private URL url;
+    private String url;
+    private DownloadManager superDownloaderManager;
+    private DownloadMission superDownloaderMission;
 
-    public Downloader(@NotNull String url) throws MalformedURLException {
-        this.url = new URL(url);
-    }
-
-    public Downloader(@NotNull URL url) {
+    public Downloader(@NotNull String url) {
         this.url = url;
     }
 
-    public String catchAsString() throws IOException {
-        StringBuilder data = new StringBuilder();
-        String temp;
-        BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-        while ((temp = in.readLine()) != null) {
-            data.append(temp);
-        }
-        in.close();
-        return data.toString();
+    public void inititalzeSuperDownloader() {
+        superDownloaderManager = DownloadManager.getInstance();
+    }
+
+    public void downloadFile(String newName) throws IOException {
+        downloadFile(newName, "");
+    }
+
+    public void downloadFile(String newName, String saveDirectory) throws IOException {
+        superDownloaderMission =  new DownloadMission(url, saveDirectory, newName);
+        superDownloaderManager.addMission(superDownloaderMission);
+        superDownloaderManager.start();
+    }
+
+    public DownloadMission getDownloadMission() {
+        return superDownloaderMission;
+    }
+
+    public DownloadManager getDownloadManager() {
+        return superDownloaderManager;
     }
 }
