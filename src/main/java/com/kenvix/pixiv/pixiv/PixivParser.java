@@ -3,15 +3,13 @@ package com.kenvix.pixiv.pixiv;
 import com.kenvix.pixiv.driver.CommonParser;
 import com.kenvix.pixiv.driver.ImageItem;
 import com.kenvix.pixiv.pixiv.data.PixivIndexImageItem;
-import org.w3c.dom.*;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.io.StringReader;
+import java.util.ArrayList;
 
 class PixivParser extends CommonParser {
     static final String imgMasterFlag = "img-master";
@@ -25,25 +23,39 @@ class PixivParser extends CommonParser {
     }
 
     private PixivIndexImageItem[] parseIndexImageIllusts(Document dom) {
-        String fieldValue = dom.getElementById("init-config").getNodeValue();
-        jsonArray = JSONArray.fromObject(array);
+        String fieldValue = dom.getElementById("init-config").val();
+        JSONObject jsonObject = new JSONObject(fieldValue);
+        JSONArray pixivItems = jsonObject.getJSONObject("pixivBackgroundSlideshow.illusts").getJSONArray("landscape");
+        ArrayList<PixivIndexImageItem> result = new ArrayList<>();
+        for (Object obj: pixivItems) {
+            if(obj instanceof JSONObject) {
+                JSONObject rawItem = (JSONObject) obj;
+                PixivIndexImageItem newItem = new PixivIndexImageItem();
+                newItem.author = rawItem.getString("user_name");
+                newItem.fromURL = rawItem.getString("www_member_illust_medium_url");
+                newItem.imgRawURL = rawItem.getJSONObject("url").getString("1200x1200");
+                newItem.title = rawItem.getString("illust_title");
+                newItem.userURL = rawItem.getString("www_user_url");
+                newItem.imageURL = getImgURL(newItem);
+                result.add(newItem);
+            }
+        }
+        return result.toArray(new PixivIndexImageItem[0]);
     }
 
     @Override
-    public ImageItem[] getImageItems(String rawData) throws ParserConfigurationException, IOException, SAXException {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        return parseIndexImageIllusts(builder.parse(new InputSource(new StringReader(rawData))));
+    public ImageItem[] getImageItems(String rawData) {
+        return parseIndexImageIllusts(Jsoup.parse(rawData));
     }
 
     @Override
-    public ImageItem[] getImageItems() throws ParserConfigurationException, IOException, SAXException {
+    public ImageItem[] getImageItems() throws IOException {
         return getImageItems(catchNetworkData(homepageURL));
     }
 
     @Override
     public String getImgURL(ImageItem item) {
-        StringBuilder str = new StringBuilder(item.imgRawURL);
+        StringBuilder str = new StringBuilder(item.getImgRawURL());
         int masterFlagIndex = str.indexOf(PixivParser.imgMasterFlag);
         str.replace(masterFlagIndex, masterFlagIndex + PixivParser.imgMasterFlag.length(), PixivParser.imgOriginalFlag);
         int masterFileNameSuffixIndex = str.indexOf(PixivParser.imgMasterFileNameSuffix);

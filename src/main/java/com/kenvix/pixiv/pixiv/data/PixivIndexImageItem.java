@@ -30,4 +30,10 @@ public class PixivIndexImageItem implements ImageItem {
      * Original Image URL
      */
     public String imageURL;
+
+    public String getTitle() { return title; }
+    public String getAuthor() { return author; }
+    public String getFromURL() { return fromURL;}
+    public String getImgRawURL() { return imgRawURL; }
+    public String getImageURL() { return imageURL; }
 }
