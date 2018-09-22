@@ -4,6 +4,7 @@ import com.kenvix.pixiv.pixiv.PixivDriver;
 import org.apache.commons.cli.*;
 import org.xml.sax.SAXException;
 
+import java.sql.SQLException;
 import java.util.Properties;
 
 public class Main {
@@ -51,6 +52,10 @@ public class Main {
             for (ImageItem item : items) {
                 System.out.println(item.getImageURL());
             }
+        } catch (SQLException sqlex) {
+            System.err.println("ERROR: Database fault.");
+            sqlex.printStackTrace();
+            sleep(1500);
         } catch (Exception ex) {
             System.err.println("ERROR: Unexpected exception thrown. Trying to restart...");
             ex.printStackTrace();

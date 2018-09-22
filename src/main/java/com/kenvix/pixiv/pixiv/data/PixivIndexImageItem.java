@@ -6,9 +6,6 @@ import com.kenvix.pixiv.driver.ImageItem;
  * 单个PIXIV项目
  */
 public class PixivIndexImageItem implements ImageItem {
-    //illust_id
-    public int ID;
-
     //illust_title
     public String title;
 
@@ -22,9 +19,6 @@ public class PixivIndexImageItem implements ImageItem {
     public String userURL;
 
     public String imgRawURL;
-
-    //url
-    public PixivIndexImageItemURL url;
 
     /**
      * Original Image URL
