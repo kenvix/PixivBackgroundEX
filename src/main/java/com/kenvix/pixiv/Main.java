@@ -2,7 +2,6 @@ package com.kenvix.pixiv;
 import com.kenvix.pixiv.driver.ImageItem;
 import com.kenvix.pixiv.pixiv.PixivDriver;
 import org.apache.commons.cli.*;
-import org.xml.sax.SAXException;
 
 import java.sql.SQLException;
 import java.util.Properties;
@@ -48,7 +47,7 @@ public class Main {
         try {
             Downloader htmlDownloader = new Downloader(homepageURL);
             PixivDriver driver = new PixivDriver(homepageURL);
-            ImageItem[] items = driver.getItems();
+            ImageItem[] items = driver.getItemsFromSite();
             for (ImageItem item : items) {
                 System.out.println(item.getImageURL());
             }

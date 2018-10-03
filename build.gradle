@@ -1,15 +1,14 @@
-plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.2.60'
-}
-
-group 'com.kenvix'
-version '1.0'
+// Configure the Java plugin and the dependencies
+// ----------------------------------------------
+apply plugin: 'java'
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
+    testCompile 'junit:junit:4.11'
     compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
     // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
     compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.23.1'
@@ -17,12 +16,45 @@ dependencies {
     compile group: 'org.json', name: 'json', version: '20180813'
     // https://mvnrepository.com/artifact/org.jsoup/jsoup
     compile group: 'org.jsoup', name: 'jsoup', version: '1.8.3'
-
+    // https://mvnrepository.com/artifact/org.jooq/jooq
+    compile group: 'org.jooq', name: 'jooq', version: '3.11.5'
+    runtime group: 'org.xerial', name: 'sqlite-jdbc', version: '3.25.2'
 }
 
-compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'org.jooq:jooq-codegen:3.11.5'
+        classpath group: 'org.xerial', name: 'sqlite-jdbc', version: '3.25.2'
+    }
 }
-compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+
+// Use your favourite XML builder to construct the code generation configuration file
+// ----------------------------------------------------------------------------------
+def writer = new StringWriter()
+def xml = new groovy.xml.MarkupBuilder(writer)
+        .configuration('xmlns': 'http://www.jooq.org/xsd/jooq-codegen-3.11.0.xsd') {
+    jdbc() {
+        url('jdbc:sqlite:src/main/resources/database.db')//url所连接数据库表需要和真实使用环境的库表保持一致
+    }
+    generator() {
+        database() {
+            includes('.*')
+            excludes()
+            inputSchema()
+        }
+
+        target() {
+            packageName('com.kenvix.pixiv.generated.jooq')
+            directory('src/main/java')
+        }
+    }
 }
+
+// Run the code generator
+// ----------------------
+org.jooq.codegen.GenerationTool.generate(writer.toString())

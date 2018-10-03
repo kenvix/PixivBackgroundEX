@@ -6,4 +6,7 @@ public interface ImageItem {
     String getFromURL();
     String getImgRawURL();
     String getImageURL();
+    ImageStatus getStatus();
+    String getFilePath();
+    int getFieldID();
 }
