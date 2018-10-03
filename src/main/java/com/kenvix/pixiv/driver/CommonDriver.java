@@ -1,24 +1,19 @@
 package com.kenvix.pixiv.driver;
 
-import com.kenvix.pixiv.generated.jooq.tables.Example;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.SQLDialect;
-import org.jooq.TableField;
 import org.jooq.impl.DSL;
-import com.kenvix.pixiv.generated.jooq.tables.Example.*;
-
-import java.awt.*;
 import java.io.File;
 import java.sql.*;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.util.logging.Logger;
 
-public abstract class CommonDriver {
+public abstract class CommonDriver implements Taskable {
     protected String tableName;
     protected Connection conn;
     protected Statement stat;
     protected DSLContext dsl;
+    protected Logger logger;
 
     public CommonDriver() throws SQLException {
         tableName = this.getClass().getSimpleName().substring(0, this.getClass().getSimpleName().indexOf("Driver"));
@@ -26,24 +21,19 @@ public abstract class CommonDriver {
         stat = conn.createStatement();
         createEmptyTable(tableName);
         dsl = DSL.using(conn, SQLDialect.SQLITE);
+        logger = Logger.getLogger(tableName);
     }
 
-    protected int insert(ImageItem item, ImageStatus status, String filePath) throws SQLException {
-        return insertIntoDatabase(item, status, filePath);
+    protected int insert(ImageItem item) {
+        return insertIntoDatabase(item);
     }
-
-    protected int insert(ImageItem item, ImageStatus status) throws SQLException{
-        return insert(item, status, "");
-    }
-
-    protected int insert(ImageItem item) throws SQLException{
-        return insert(item, ImageStatus.New, "");
-    }
-
 
     public void insertNewItems(ImageItem[] items) {
-        for (ImageItem item :items) {
-
+        for (ImageItem item : items) {
+            if (getItemFromDatabaseByImgRawURL(item.getImgRawURL()) == null) {
+                item.setStatus(ImageStatus.New);
+                insert(item);
+            }
         }
     }
 
@@ -61,6 +51,7 @@ public abstract class CommonDriver {
     }
 
     protected ImageItem formatRecordIntoImageItem(Record record) {
+        if(record.size() < 1) return null;
         CommonImageItem item = new CommonImageItem();
         item.author = record.getValue("Author").toString();
         item.title = record.getValue("Title").toString();
@@ -73,10 +64,21 @@ public abstract class CommonDriver {
         return item;
     }
 
-    public abstract int insertIntoDatabase(ImageItem item, ImageStatus status, String filePath);
+    /**
+     * Pause
+     * @param time time in ms
+     */
+    protected void sleep(int time) {
+        try {
+            Thread.sleep(time);
+        } catch (Exception ex) {}
+    }
+
+    public abstract int insertIntoDatabase(ImageItem item);
     public abstract ImageItem getItemFromDatabaseByID(Integer id);
     public abstract ImageItem getItemFromDatabaseByImageURL(String imageURL);
     public abstract ImageItem getItemFromDatabaseByImgRawURL(String imageRawURL);
     public abstract ImageItem[] getItemsFromSite() throws Exception;
     public abstract ImageItem[] getItemsFromSite(String rawData) throws Exception;
+    public abstract void start(int time);
 }

@@ -1,4 +1,5 @@
 package com.kenvix.pixiv;
+import com.kenvix.pixiv.driver.CommonDriver;
 import com.kenvix.pixiv.driver.ImageItem;
 import com.kenvix.pixiv.pixiv.PixivDriver;
 import org.apache.commons.cli.*;
@@ -34,8 +35,17 @@ public class Main {
                 }
             }
             homepageURL = cmd.hasOption("u") ? cmd.getOptionValue("u") : "https://www.pixiv.net/";
-            while (true)
-                startPixiv(cmd.hasOption("p") ? cmd.getOptionValue("p") : "downloads");
+            String[] enabledDrivers = cmd.getOptionValue("d").split(",");
+            for (String enabledDriver: enabledDrivers) {
+                switch (enabledDriver.toLowerCase()) {
+                    case "pixiv":
+                        (new Tasker<>(new PixivDriver(cmd.getOptionValue("i")))).start();
+                        break;
+                    case "bing":
+                        break;
+                }
+            }
+            (new Tasker<>(new Downloader(cmd.getOptionValue("j")))).start();
         } catch (Exception ex) {
             System.err.println("ERROR: Unable to initialize!!!");
             System.err.println(ex.toString());
@@ -77,10 +87,11 @@ public class Main {
         ops.addOption("p", "path",false, "Path to save downloaded photos");
         ops.addOption("h", "help",false, "Print help message");
         ops.addOption("i", "interval",true, "Interval(seconds) of check updates on pixiv");
+        ops.addOption("j", "downint",true, "Interval(seconds) of download photos on pixiv");
         ops.addOption("n", "limit", true, "Once detected updates on pixiv, the limitation of the number of photos will be downloaded, 0 for infinite");
         ops.addOption("l", "life", true, "Once the number of downloaded photos reach this the number put in this argument, delete the old one, 0 for infinite");
         ops.addOption("u", "url", true, "Page url of images. default https://www.pixiv.net/ for pixiv driver");
-        ops.addOption("d", "driver", true, "Driver: pixiv / bing");
+        ops.addOption("d", "driver", true, "Driver. use , to Separate. available: pixiv bing");
         ops.addOption(Option.builder().longOpt("proxy-type").desc("socks or http. If you want to set a proxy for Internet connection, use this argument.").hasArg().build());
         ops.addOption(Option.builder().longOpt("proxy-host").desc("host of your proxy if you want to use proxy").hasArg().build());
         ops.addOption(Option.builder().longOpt("proxy-port").desc("port of your proxy if you want to use proxy").hasArg().build());

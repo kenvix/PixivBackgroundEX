@@ -1,5 +1,6 @@
 package com.kenvix.pixiv.pixiv;
 
+import com.kenvix.pixiv.Main;
 import com.kenvix.pixiv.driver.CommonDriver;
 import com.kenvix.pixiv.driver.ImageItem;
 import com.kenvix.pixiv.driver.ImageStatus;
@@ -16,6 +17,21 @@ public class PixivDriver extends CommonDriver {
     }
 
     @Override
+    public void start(int time) {
+        logger.info("Starting Pixiv worker");
+        while (true) {
+            try {
+
+            } catch (Exception ex) {
+                logger.warning("Pixiv Worker exited with an exception, will restart after " + time + "ms");
+                ex.printStackTrace();
+            } finally {
+                sleep(time);
+            }
+        }
+    }
+
+    @Override
     public ImageItem[] getItemsFromSite() throws IOException {
         return (new PixivParser(homepageURL).getImageItems());
     }
@@ -26,10 +42,10 @@ public class PixivDriver extends CommonDriver {
     }
 
     @Override
-    public int insertIntoDatabase(ImageItem item, ImageStatus status, String filePath) {
+    public int insertIntoDatabase(ImageItem item) {
         Pixiv table = Pixiv.PIXIV;
         return dsl.insertInto(table, table.AUTHOR, table.FILEPATH, table.FROMURL, table.IMAGEURL, table.IMGRAWURL, table.STATUS, table.TITLE)
-                .values(item.getAuthor(), filePath, item.getFromURL(), item.getImageURL(), item.getImgRawURL(), status.toString(), item.getTitle())
+                .values(item.getAuthor(), item.getFilePath(), item.getFromURL(), item.getImageURL(), item.getImgRawURL(), item.getStatus().toString(), item.getTitle())
                 .returning(table.ID).fetchOne().getId();
     }
 

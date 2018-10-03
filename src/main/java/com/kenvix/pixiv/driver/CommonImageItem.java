@@ -33,4 +33,6 @@ public class CommonImageItem implements ImageItem {
     public ImageStatus getStatus() { return status; }
     public String getFilePath() { return filePath; }
     public int getFieldID() { return fieldID; }
+    public void setStatus(ImageStatus newStatus) { status = newStatus; }
+    public void setFilePath(String newFilePath) { filePath = newFilePath; }
 }

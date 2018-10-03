@@ -1,11 +1,12 @@
 package com.kenvix.pixiv;
 
+import com.kenvix.pixiv.driver.Taskable;
 import com.zhan_dui.download.DownloadManager;
 import com.zhan_dui.download.DownloadMission;
 
 import java.io.IOException;
 
-public class Downloader {
+public class Downloader implements Taskable {
     private String url;
     private DownloadManager superDownloaderManager;
     private DownloadMission superDownloaderMission;
@@ -34,5 +35,10 @@ public class Downloader {
 
     public DownloadManager getDownloadManager() {
         return superDownloaderManager;
+    }
+
+    @Override
+    public void start(int time) {
+
     }
 }
