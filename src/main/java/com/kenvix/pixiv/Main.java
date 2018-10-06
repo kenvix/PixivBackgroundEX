@@ -45,7 +45,7 @@ public class Main {
                         break;
                 }
             }
-            (new Tasker<>(new Downloader(cmd.getOptionValue("j")))).start();
+            (new Tasker<>(new ImageItemDownloader(cmd.getOptionValue("p")), Integer.parseInt(cmd.getOptionValue("j")))).start("Downloader");
         } catch (Exception ex) {
             System.err.println("ERROR: Unable to initialize!!!");
             System.err.println(ex.toString());

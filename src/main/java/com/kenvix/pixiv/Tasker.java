@@ -19,7 +19,13 @@ public class Tasker<T extends Taskable> implements Runnable {
         driver.start(sleep);
     }
 
-    public void start() {
+    public T start() {
         (new Thread(this)).start();
+        return driver;
+    }
+
+    public T start(String name) {
+        (new Thread(this, name)).start();
+        return driver;
     }
 }

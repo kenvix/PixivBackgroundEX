@@ -39,7 +39,7 @@ def writer = new StringWriter()
 def xml = new groovy.xml.MarkupBuilder(writer)
         .configuration('xmlns': 'http://www.jooq.org/xsd/jooq-codegen-3.11.0.xsd') {
     jdbc() {
-        url('jdbc:sqlite:src/main/resources/database.db')//url所连接数据库表需要和真实使用环境的库表保持一致
+        url('jdbc:sqlite:src/main/resources/database.db')
     }
     generator() {
         database() {

@@ -1,5 +1,6 @@
 package com.kenvix.pixiv.driver;
 
+import com.kenvix.pixiv.Downloader;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.SQLDialect;
@@ -37,17 +38,8 @@ public abstract class CommonDriver implements Taskable {
         }
     }
 
-    private boolean createEmptyTable(String tableName) throws SQLException {
-        return stat.execute("CREATE TABLE IF NOT EXISTS \"main\".\""+tableName+"\" (\n" +
-                "  \"ID\" integer NOT NULL PRIMARY KEY AUTOINCREMENT,\n" +
-                "  \"Title\" TEXT NOT NULL DEFAULT '',\n" +
-                "  \"Author\" TEXT NOT NULL DEFAULT '',\n" +
-                "  \"FromURL\" TEXT NOT NULL DEFAULT '',\n" +
-                "  \"ImgRawURL\" TEXT NOT NULL DEFAULT '' UNIQUE,\n" +
-                "  \"ImageURL\" TEXT NOT NULL DEFAULT '' UNIQUE,\n" +
-                "  \"FilePath\" TEXT NOT NULL DEFAULT '',\n" +
-                "  \"Status\" TEXT NOT NULL DEFAULT 0\n" +
-                ");");
+    protected Downloader getDownloader() {
+        return
     }
 
     protected ImageItem formatRecordIntoImageItem(Record record) {
@@ -74,6 +66,7 @@ public abstract class CommonDriver implements Taskable {
         } catch (Exception ex) {}
     }
 
+    protected abstract boolean createEmptyTable(String tableName) throws SQLException;
     public abstract int insertIntoDatabase(ImageItem item);
     public abstract ImageItem getItemFromDatabaseByID(Integer id);
     public abstract ImageItem getItemFromDatabaseByImageURL(String imageURL);

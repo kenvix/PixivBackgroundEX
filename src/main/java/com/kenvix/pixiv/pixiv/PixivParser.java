@@ -37,6 +37,7 @@ class PixivParser extends CommonParser {
                 newItem.title = rawItem.getString("illust_title");
                 newItem.userURL = rawItem.getString("www_user_url");
                 newItem.imageURL = getImgURL(newItem);
+                newItem.filePath = newItem.imgRawURL.substring(newItem.imgRawURL.lastIndexOf('/') + 1);
                 result.add(newItem);
             }
         }

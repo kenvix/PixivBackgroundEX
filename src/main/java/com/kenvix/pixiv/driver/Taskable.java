@@ -1,5 +1,5 @@
 package com.kenvix.pixiv.driver;
 
-public interface Taskable {
-    void start(int time);
+public interface Taskable<T> {
+    T start(int time);
 }

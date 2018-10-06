@@ -6,13 +6,20 @@ import com.zhan_dui.download.DownloadMission;
 
 import java.io.IOException;
 
-public class Downloader implements Taskable {
+public class Downloader {
     private String url;
     private DownloadManager superDownloaderManager;
     private DownloadMission superDownloaderMission;
 
     public Downloader(String url) {
         this.url = url;
+    }
+
+    public Downloader() { }
+
+    public Downloader setURL(String url) {
+        this.url = url;
+        return this;
     }
 
     public void inititalzeSuperDownloader() {
@@ -35,10 +42,5 @@ public class Downloader implements Taskable {
 
     public DownloadManager getDownloadManager() {
         return superDownloaderManager;
-    }
-
-    @Override
-    public void start(int time) {
-
     }
 }

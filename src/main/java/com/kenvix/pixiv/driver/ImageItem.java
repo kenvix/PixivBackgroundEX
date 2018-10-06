@@ -7,6 +7,12 @@ public interface ImageItem {
     String getImgRawURL();
     String getImageURL();
     ImageStatus getStatus();
+
+    /**
+     * Get relative file path of a image file.
+     * Returns file name only if file has not been downloaded
+     * @return String
+     */
     String getFilePath();
     int getFieldID();
     void setStatus(ImageStatus newStatus);
