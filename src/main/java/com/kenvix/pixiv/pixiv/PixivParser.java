@@ -9,7 +9,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 class PixivParser extends CommonParser {
     static final String imgMasterFlag = "img-master";
@@ -26,7 +26,7 @@ class PixivParser extends CommonParser {
         String fieldValue = dom.getElementById("init-config").val();
         JSONObject jsonObject = new JSONObject(fieldValue);
         JSONArray pixivItems = jsonObject.getJSONObject("pixivBackgroundSlideshow.illusts").getJSONArray("landscape");
-        ArrayList<PixivIndexImageItem> result = new ArrayList<>();
+        LinkedList<PixivIndexImageItem> result = new LinkedList<>();
         for (Object obj: pixivItems) {
             if(obj instanceof JSONObject) {
                 JSONObject rawItem = (JSONObject) obj;

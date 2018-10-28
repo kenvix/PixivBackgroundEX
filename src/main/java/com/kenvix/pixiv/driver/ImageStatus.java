@@ -4,6 +4,7 @@ public enum ImageStatus {
     Ready,
     Downloading,
     New,
-    DownloadFailed,
+    Failed,
+    TriedButFailed,
     Unknown
 }
