@@ -40,6 +40,10 @@ public abstract class CommonDriver implements Taskable {
         }
     }
 
+    @FunctionalInterface
+    interface formatRecord<T> {
+        public void print(T x);
+    }
     protected final ImageItem formatRecordIntoImageItem(Record record) {
         if(record.size() < 1) return null;
         CommonImageItem item = new CommonImageItem();
@@ -77,10 +81,11 @@ public abstract class CommonDriver implements Taskable {
                 "  \"Title\" TEXT NOT NULL DEFAULT '',\n" +
                 "  \"Author\" TEXT NOT NULL DEFAULT '',\n" +
                 "  \"FromURL\" TEXT NOT NULL DEFAULT '',\n" +
-                "  \"ImgRawURL\" TEXT NOT NULL DEFAULT '' UNIQUE,\n" +
-                "  \"ImageURL\" TEXT NOT NULL DEFAULT '' UNIQUE,\n" +
+                "  \"ImgRawURL\" TEXT NOT NULL DEFAULT '',\n" +
+                "  \"ImageURL\" TEXT NOT NULL DEFAULT '',\n" +
                 "  \"FilePath\" TEXT NOT NULL DEFAULT '',\n" +
-                "  \"Status\" TEXT NOT NULL DEFAULT 0\n" +
+                "  \"Status\" TEXT NOT NULL DEFAULT 0,\n" +
+                "  \"TriedNum\" integer NOT NULL DEFAULT 0\n" +
                 ");");
     }
 
@@ -99,4 +104,6 @@ public abstract class CommonDriver implements Taskable {
      * @return updated ImageItem
      */
     public abstract ImageItem updateItemStatus(ImageItem item, ImageStatus status);
+    public abstract ImageItem updateItemTriedNum(ImageItem item, int num);
+    //public abstract void onImageDownloaded()
 }

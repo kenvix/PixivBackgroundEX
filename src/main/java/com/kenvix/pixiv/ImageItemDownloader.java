@@ -6,11 +6,11 @@ import com.kenvix.pixiv.driver.ImageStatus;
 import com.kenvix.pixiv.driver.Taskable;
 import com.zhan_dui.download.DownloadMission;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 public class ImageItemDownloader<T extends CommonDriver> implements Taskable {
-    private HashMap<String, ImageItem> tasks = new HashMap<>();
+    private ConcurrentHashMap<String, ImageItem> tasks = new ConcurrentHashMap<>(); //synchronized
     private Downloader downloader = new Downloader();
     private Logger logger = Logger.getLogger("Downloader");
     private String savePath;
@@ -22,22 +22,31 @@ public class ImageItemDownloader<T extends CommonDriver> implements Taskable {
         importTasks(ImageStatus.New);
     }
 
+    /**
+     * import tasks from database by status
+     * @param status
+     */
     private void importTasks(ImageStatus status) {
         ImageItem[] items = target.getItemsFromDatabaseByStatus(status);
         for(ImageItem item: items)
             addTask(item);
     }
 
-    private synchronized ImageItem[] scanTasks(ImageStatus status) {
+    /**
+     * Call driver to scan items
+     * @param status
+     * @return
+     */
+    private ImageItem[] scanTasks(ImageStatus status) {
 
     }
 
-    protected synchronized ImageItemDownloader addTask(ImageItem item) {
+    protected ImageItemDownloader addTask(ImageItem item) {
         tasks.put(item.getImgRawURL(), item);
         return this;
     }
 
-    protected synchronized ImageItemDownloader removeTask(ImageItem item) {
+    protected ImageItemDownloader removeTask(ImageItem item) {
         tasks.remove(item.getImgRawURL());
         return this;
     }
@@ -49,18 +58,28 @@ public class ImageItemDownloader<T extends CommonDriver> implements Taskable {
     }
 
     private void doTask() {
-        for (HashMap.Entry<String, ImageItem> entry: this.tasks.entrySet()) {
+        for (ConcurrentHashMap.Entry<String, ImageItem> entry: this.tasks.entrySet()) {
+            ImageItem item = entry.getValue();
             try {
-                removeTask(entry.getValue());
+                removeTask(item);
                 downloader.setURL(entry.getKey());
-                downloader.downloadFile(entry.getValue().getFilePath());
+                downloader.downloadFile(item.getFilePath());
                 DownloadMission mission = downloader.getDownloadMission();
                 while(!mission.isFinished())
                     sleep(100);
+                target.updateItemStatus(item, ImageStatus.OK);
             } catch (Exception ex) {
                 logger.warning("Failed to download " + entry.getKey());
                 ex.printStackTrace();
-                addTask(entry.getValue());
+                item.addTriedNum();
+                //TODO: DEFINE MAX FAILED NUM
+                if(item.getTriedNum() < 10) {
+                    target.updateItemStatus(item, ImageStatus.Failed);
+                    target.updateItemTriedNum(item, item.getTriedNum());
+                    addTask(item);
+                } else {
+                    target.updateItemStatus(item, ImageStatus.TriedButFailed);
+                }
             }
         }
     }
@@ -69,7 +88,7 @@ public class ImageItemDownloader<T extends CommonDriver> implements Taskable {
     public ImageItemDownloader start(int time) {
         while (true) {
             if(!tasks.isEmpty())
-                doTask();
+                doTask(); //should i support multi threading?
             else
                 sleep(time);
         }

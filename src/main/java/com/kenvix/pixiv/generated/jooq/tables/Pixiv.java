@@ -39,7 +39,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Pixiv extends TableImpl<PixivRecord> {
 
-    private static final long serialVersionUID = 266865374;
+    private static final long serialVersionUID = -1711602042;
 
     /**
      * The reference instance of <code>Pixiv</code>
@@ -93,6 +93,11 @@ public class Pixiv extends TableImpl<PixivRecord> {
      * The column <code>Pixiv.Status</code>.
      */
     public final TableField<PixivRecord, String> STATUS = createField("Status", org.jooq.impl.SQLDataType.CLOB.nullable(false).defaultValue(org.jooq.impl.DSL.field("0", org.jooq.impl.SQLDataType.CLOB)), this, "");
+
+    /**
+     * The column <code>Pixiv.TriedNum</code>.
+     */
+    public final TableField<PixivRecord, Integer> TRIEDNUM = createField("TriedNum", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.field("0", org.jooq.impl.SQLDataType.INTEGER)), this, "");
 
     /**
      * Create a <code>Pixiv</code> table reference

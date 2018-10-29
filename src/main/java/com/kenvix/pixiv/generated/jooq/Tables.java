@@ -7,6 +7,7 @@ package com.kenvix.pixiv.generated.jooq;
 import com.kenvix.pixiv.generated.jooq.tables.Example;
 import com.kenvix.pixiv.generated.jooq.tables.Pixiv;
 import com.kenvix.pixiv.generated.jooq.tables.SqliteSequence;
+import com.kenvix.pixiv.generated.jooq.tables._PixivOld_20181028;
 
 import javax.annotation.Generated;
 
@@ -33,6 +34,11 @@ public class Tables {
      * The table <code>Pixiv</code>.
      */
     public static final Pixiv PIXIV = com.kenvix.pixiv.generated.jooq.tables.Pixiv.PIXIV;
+
+    /**
+     * The table <code>_Pixiv_old_20181028</code>.
+     */
+    public static final _PixivOld_20181028 _PIXIV_OLD_20181028 = com.kenvix.pixiv.generated.jooq.tables._PixivOld_20181028._PIXIV_OLD_20181028;
 
     /**
      * The table <code>sqlite_sequence</code>.

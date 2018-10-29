@@ -4,26 +4,18 @@ import com.kenvix.pixiv.driver.ImageItem;
 
 public class CommonImageItem implements ImageItem {
     public int fieldID = 0;
-
     //illust_title
     public String title;
-
     //userName
     public String author;
-
     //www_member_illust_medium_url
     public String fromURL;
-
     public String imgRawURL;
-
-    /**
-     * Original Image URL
-     */
+    //Original Image URL
     public String imageURL;
-
     public ImageStatus status = ImageStatus.Unknown;
-
     public String filePath = "";
+    public int triedNum = 0;
 
     public String getTitle() { return title; }
     public String getAuthor() { return author; }
@@ -33,6 +25,10 @@ public class CommonImageItem implements ImageItem {
     public ImageStatus getStatus() { return status; }
     public String getFilePath() { return filePath; }
     public int getFieldID() { return fieldID; }
+    public int getTriedNum() { return triedNum; }
     public void setStatus(ImageStatus newStatus) { status = newStatus; }
     public void setFilePath(String newFilePath) { filePath = newFilePath; }
+    public void setTriedNum(int num) { triedNum = num; }
+    public void setFieldID(int id) { fieldID = id; }
+    public void addTriedNum() { triedNum++; }
 }

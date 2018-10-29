@@ -7,6 +7,7 @@ package com.kenvix.pixiv.generated.jooq;
 import com.kenvix.pixiv.generated.jooq.tables.Example;
 import com.kenvix.pixiv.generated.jooq.tables.Pixiv;
 import com.kenvix.pixiv.generated.jooq.tables.SqliteSequence;
+import com.kenvix.pixiv.generated.jooq.tables._PixivOld_20181028;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +33,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DefaultSchema extends SchemaImpl {
 
-    private static final long serialVersionUID = 1452024481;
+    private static final long serialVersionUID = -1828128950;
 
     /**
      * The reference instance of <code></code>
@@ -48,6 +49,11 @@ public class DefaultSchema extends SchemaImpl {
      * The table <code>Pixiv</code>.
      */
     public final Pixiv PIXIV = com.kenvix.pixiv.generated.jooq.tables.Pixiv.PIXIV;
+
+    /**
+     * The table <code>_Pixiv_old_20181028</code>.
+     */
+    public final _PixivOld_20181028 _PIXIV_OLD_20181028 = com.kenvix.pixiv.generated.jooq.tables._PixivOld_20181028._PIXIV_OLD_20181028;
 
     /**
      * The table <code>sqlite_sequence</code>.
@@ -81,6 +87,7 @@ public class DefaultSchema extends SchemaImpl {
         return Arrays.<Table<?>>asList(
             Example.EXAMPLE,
             Pixiv.PIXIV,
+            _PixivOld_20181028._PIXIV_OLD_20181028,
             SqliteSequence.SQLITE_SEQUENCE);
     }
 }

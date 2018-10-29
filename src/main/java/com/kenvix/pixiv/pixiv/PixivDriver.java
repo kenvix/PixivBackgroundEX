@@ -75,4 +75,11 @@ public class PixivDriver extends CommonDriver {
         dsl.update(Pixiv.PIXIV).set(Pixiv.PIXIV.STATUS, status.toString()).execute();
         return item;
     }
+
+    @Override
+    public ImageItem updateItemTriedNum(ImageItem item, int num) {
+        item.setTriedNum(num);
+        dsl.update(Pixiv.PIXIV).set(Pixiv.PIXIV.TRIEDNUM, num).execute();
+        return item;
+    }
 }

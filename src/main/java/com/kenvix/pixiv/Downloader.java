@@ -1,6 +1,5 @@
 package com.kenvix.pixiv;
 
-import com.kenvix.pixiv.driver.Taskable;
 import com.zhan_dui.download.DownloadManager;
 import com.zhan_dui.download.DownloadMission;
 
@@ -30,16 +29,16 @@ public class Downloader {
         downloadFile(newName, "");
     }
 
-    public void downloadFile(String newName, String saveDirectory) throws IOException {
+    public DownloadMission downloadFile(String newName, String saveDirectory) throws IOException {
         superDownloaderMission =  new DownloadMission(url, saveDirectory, newName);
         superDownloaderManager.addMission(superDownloaderMission);
         superDownloaderManager.start();
+        return this.getDownloadMission();
     }
 
     public DownloadMission getDownloadMission() {
         return superDownloaderMission;
     }
-
     public DownloadManager getDownloadManager() {
         return superDownloaderManager;
     }

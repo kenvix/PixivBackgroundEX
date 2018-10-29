@@ -15,6 +15,10 @@ public interface ImageItem {
      */
     String getFilePath();
     int getFieldID();
+    int getTriedNum();
     void setStatus(ImageStatus newStatus);
     void setFilePath(String newFilePath);
+    void setTriedNum(int num);
+    void setFieldID(int id);
+    void addTriedNum();
 }
