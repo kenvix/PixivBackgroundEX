@@ -11,7 +11,7 @@ import java.sql.*;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 
-public abstract class CommonDriver implements Taskable {
+public abstract class CommonDriver extends implements Taskable {
     protected String tableName;
     protected Connection conn;
     protected Statement stat;

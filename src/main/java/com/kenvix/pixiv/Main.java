@@ -5,10 +5,16 @@ import com.kenvix.pixiv.pixiv.PixivDriver;
 import org.apache.commons.cli.*;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Properties;
 
 public class Main {
     private static String homepageURL;
+    private final static HashMap<String, ? extends CommonDriver> registeredDrivers = new HashMap<String, ? extends CommonDriver > {
+        {
+
+        }
+    };
 
     public static void main(String[] args) {
         try {
@@ -37,13 +43,7 @@ public class Main {
             homepageURL = cmd.hasOption("u") ? cmd.getOptionValue("u") : "https://www.pixiv.net/";
             String[] enabledDrivers = cmd.getOptionValue("d").split(",");
             for (String enabledDriver: enabledDrivers) {
-                switch (enabledDriver.toLowerCase()) {
-                    case "pixiv":
-                        (new Tasker<>(new PixivDriver(cmd.getOptionValue("i")))).start();
-                        break;
-                    case "bing":
-                        break;
-                }
+                if(registeredDrivers.)
             }
             (new Tasker<>(new ImageItemDownloader(cmd.getOptionValue("p")), Integer.parseInt(cmd.getOptionValue("j")))).start("Downloader");
         } catch (Exception ex) {
